@@ -2,13 +2,13 @@
 
 Do-file "5. Replication analysis KLPS.do"
 
-Replication code for 
+Replication code for
 Joan Hamory, Marieke Kleemans, Nicholas Y. Li, and Edward Miguel
 Reevaluating Agricultural Productivity Gaps with Longitudinal Microdata
 Created Aug 2020 using Stata version 14.2
 
-This do-file uses the 4 datasets created by do-file "4. Creation of KLPS 
-replication data.do" to replicate all figures and tables that use KLPS data 
+This do-file uses the 4 datasets created by do-file "4. Creation of KLPS
+replication data.do" to replicate all figures and tables that use KLPS data
 
 Please contact Marieke Kleemans at kleemans@illinois.edu for questions
 
@@ -239,9 +239,9 @@ graph save "Figure1.gph" , replace
 		graph export "Figure1.eps" , replace
 
 	graph set eps fontface default
-	
 
-********************************************************************************		
+
+********************************************************************************
 *** Figure 3: Event Study of Urban Migration
 ********************************************************************************
 preserve
@@ -650,8 +650,8 @@ gen eventime = yrmth - firstmoveR2U
 	graph set window fontface default
 	graph set eps fontface default
 
-restore	
-********************************************************************************		
+restore
+********************************************************************************
 *** Table 1: Non-Agriculture/Agriculture and Urban/Rural
 ********************************************************************************
 preserve
@@ -764,8 +764,8 @@ esttab matrix(xtab, fmt("%7.4f %7.4f %10.0fc" "%7.4f %7.4f %10.0fc"  "%7.4f %7.4
 restore
 
 
-********************************************************************************		
-*** Table 2_KLPS: Summary Statistics											 
+********************************************************************************
+*** Table 2_KLPS: Summary Statistics
 ********************************************************************************
 egen nonag_ever = max(nonag) , by(pupid)
 
@@ -847,7 +847,7 @@ egen nonag_ever = max(nonag) , by(pupid)
 		booktabs
 
 
-********************************************************************************		
+********************************************************************************
 *** Table 3: Correlates of Employment in Non-Agriculture and Urban Migration
 ********************************************************************************
 preserve
@@ -883,47 +883,64 @@ esttab A B C D using "Table3.tex", replace f ///
 ********************************************************************************
 use "Main_Analysis_KLPS.dta", clear
 
+*Column 1: OLS, raw gap
 reg lninc nonag [aw=weight], cluster(pupid) robust
 estadd local timeFE "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
+
+*Column 2: time fixed effects and controls for log hours and log hours squared
 reg lninc nonag lnhour lnhour_sq i.yrmth [aw=weight], cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store B
+
+*Column 3: all adjustments from Col 2 plus indicator for female, education yrs, edu yrs sqrd
 reg lninc nonag lnhour lnhour_sq female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher i.yrmth [aw=weight], cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
+
+*Column 4: all adjustments from Col 3 plus scores from Raven's Matrices tests
 reg lninc nonag lnhour lnhour_sq female age age_sq educyr educyr_sq ravens ravens_sq voced voced_treat_info voced_treat_voucher i.yrmth [aw=weight], cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store D
+
+*Column 5: all adjustments from Col 3 and limit sample to those that have productivity measures in ag and nonag
 reg lninc nonag lnhour lnhour_sq female age age_sq educyr educyr_sq ravens ravens_sq voced voced_treat_info voced_treat_voucher i.yrmth if NA_mover == 1 [aw=weight], cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local moverUonly "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store E
+
+*Column 6: individual FE, time FE, no hours control
 xtreg lninc nonag age_sq i.yrmth [aw=weight], fe i(pupid) cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store F
+
+*Column 7: individual FE, time FE, log hours and log hours sqrd
 xtreg lninc nonag lnhour lnhour_sq age_sq i.yrmth [aw=weight], fe i(pupid) cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
+
+*Column 8: using wage as dependent var (tot earnings / hrs worked), same specifications as Col 6
 xtreg lninc_h nonag age_sq i.yrmth [aw=weight], fe i(pupid) cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store H
+
+*Column 9: same specification as Col 8, adjusting for urban prices
 xtreg lninc_h_real nonag age_sq i.yrmth [aw=weight], fe i(pupid) cluster(pupid) robust
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
@@ -940,8 +957,8 @@ esttab A B C D E F G H I using "Table4_KLPS.tex", replace f ///
 	stats(indFE timeFE moverUonly N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table 5: Urban/Rural Gap in Earnings
 ********************************************************************************
 *** lninc_urban_KLPS_extraC6
@@ -1000,9 +1017,9 @@ esttab A B C D E F G H I using "Table5_KLPS.tex", replace f ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE timeFE moverUonly N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
-	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))	
+	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
 
-	
+
 ********************************************************************************
 *** Appendix Figures and Tables
 ********************************************************************************
@@ -1331,10 +1348,10 @@ graph set window fontface default
 graph set eps fontface default
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A1: Correlates of Employment in Non-Agriculture
 ********************************************************************************
-use "Main_Analysis_KLPS.dta", clear		
+use "Main_Analysis_KLPS.dta", clear
 preserve
 egen nonag_ever = max(nonag) , by(pupid)
 
@@ -1390,8 +1407,8 @@ egen nonag_ever = max(nonag) , by(pupid)
 	  booktabs ///
 	  width(\hsize)
 
-	  
-********************************************************************************		
+
+********************************************************************************
 *** Table A2: Correlates of Urban Migration
 ********************************************************************************
   foreach var of varlist educpri educsec educcol female ravens {
@@ -1412,7 +1429,7 @@ egen nonag_ever = max(nonag) , by(pupid)
 		width(\hsize)
 
 restore
-********************************************************************************		
+********************************************************************************
 *** Table A5: Kenya Urban Towns
 ********************************************************************************
 preserve
@@ -1458,7 +1475,7 @@ esttab kenya_urban_town ///
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A6: Non-Agricultural/Agricultural Gap in Earnings using Alternative Definition of Agriculture
 ********************************************************************************
 *** lninc_nonagonly_KLPS
@@ -1523,7 +1540,7 @@ esttab A C G H AA CC GG HH using "TableA6_KLPS.tex", replace f ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A7: Non-Agricultural/Agricultural Gap in Earnings Within Rural Areas
 ********************************************************************************
 *** If currently in rural area
@@ -1568,7 +1585,7 @@ esttab A C G H using "TableA7_KLPS.tex", replace f ///
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A8: Non-Agricultural/Agricultural Gap in Hours Worked
 ********************************************************************************
 use "Main_Analysis_KLPS.dta", clear
@@ -1612,7 +1629,7 @@ esttab A C D E G using "TableA8_KLPS.tex", replace f ///
 	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A9: Urban/Rural Gap in Hours Worked
 ********************************************************************************
 *** lnhour_urban_KLPS
@@ -1654,7 +1671,7 @@ esttab A C D E G using "TableA9_KLPS.tex", replace f ///
 	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A10: Robustness to Alternative Agricultural Productivity Measures
 ********************************************************************************
 xtreg lninc_h nonag age_sq i.yrmth [aw=weight], fe i(pupid) cluster(pupid) robust
@@ -1777,7 +1794,7 @@ count if first_ag1==1
 drop ag_forinc ag_self1 ag_ag1 first_forag first_self1 first_ag1
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A12: Gap in Wage Earnings
 ********************************************************************************
 preserve
@@ -1848,7 +1865,7 @@ esttab A C G H AA CC GG HH using "TableA12_KLPS.tex", replace f ///
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A13: Gap in Self-Employment Earnings
 ********************************************************************************
 preserve
@@ -1919,7 +1936,7 @@ esttab A C G H AA CC GG HH using "TableA13_KLPS.tex", replace f type ///
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A14: Alternative Samples Kenya
 ********************************************************************************
 preserve
@@ -2083,7 +2100,7 @@ esttab A C F G AA CC FF GG using "TableA14_KLPS_PanelB.tex", replace f ///
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A15: Unemployment and Job Search Behavior, Kenya
 ********************************************************************************
 use "Consumption_Analysis_KLPS.dta", clear
@@ -2178,11 +2195,11 @@ esttab A C F using "TableA15_search.tex", replace f ///
 	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	//	stats(N, fmt(0 3) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{S}{@}") labels(`"Observations"'))
 	stats(indFE contr depmean N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Mean dependent variable"' `"Number of observations"' `"Number of individuals"'))
-	
+
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A16: Alternative Coefficient Standard Error Estimation
 ********************************************************************************
 run "6. Cr23_ik_css_mod.do"
@@ -2365,7 +2382,7 @@ matrix stderr_young = vecdiag(temp)
 
 estadd matrix stderr_young: F
 
-xtreg lninc_h `urban' age_sq i.yrmth, fe i(pupid) cluster(pupid)			
+xtreg lninc_h `urban' age_sq i.yrmth, fe i(pupid) cluster(pupid)
 est store G
 estadd local contr "Y" , replace: G
 estadd local indFE "Y" , replace: G
@@ -2555,7 +2572,7 @@ matrix stderr_young = vecdiag(temp)
 
 estadd matrix stderr_young: FF
 
-xtreg lninc_h nonag age_sq i.yrmth, fe i(pupid) cluster(pupid)			
+xtreg lninc_h nonag age_sq i.yrmth, fe i(pupid) cluster(pupid)
 est store GG
 estadd local contr "Y" , replace: GG
 estadd local indFE "Y" , replace: GG
@@ -2617,7 +2634,7 @@ esttab AA CC FF GG A C F G using "TableA16_KLPS.tex", replace type f ///
 drop res_lninc res_lninc_h res_`urban' res_nonag `residualized2'
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A17: Integenerational Correlations of Cognitive Measures
 ********************************************************************************
 use "Intergen_Analysis_KLPS.dta", clear
@@ -2667,8 +2684,8 @@ esttab child_cogn_index_reg* using "TableA17_KLPS.tex", ///
 		layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}")) ///
 	nonotes
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A18: Correlates of Meals Eaten—Kenya
 ********************************************************************************
 use "Consumption_Analysis_KLPS.dta", clear
@@ -2688,7 +2705,7 @@ esttab lncons_tot lninc lninc_h ///
 	booktabs
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A19: Gaps in Consumption
 ********************************************************************************
 use "Meals_Analysis_KLPS.dta", clear
@@ -2758,7 +2775,7 @@ esttab ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A23: Urban/Rural Gap in inforinc_h for Top 5 Cities
 ********************************************************************************
 use "Main_Analysis_KLPS.dta", clear
@@ -2796,4 +2813,3 @@ esttab A0 A C F using "TableA23_KLPS.tex", replace f ///
 	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
-

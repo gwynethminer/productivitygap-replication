@@ -2,13 +2,13 @@
 
 Do-file "3. Replication analysis IFLS.do"
 
-Replication code for 
+Replication code for
 Joan Hamory, Marieke Kleemans, Nicholas Y. Li, and Edward Miguel
 Reevaluating Agricultural Productivity Gaps with Longitudinal Microdata
 Created Aug 2020 using Stata version 14.2
 
-This do-file uses the 3 datasets created by do-file "2. Creation of IFLS 
-replication data.do" to replicate all figures and tables that use IFLS data 
+This do-file uses the 3 datasets created by do-file "2. Creation of IFLS
+replication data.do" to replicate all figures and tables that use IFLS data
 
 Please contact Marieke Kleemans at kleemans@illinois.edu for questions
 
@@ -19,24 +19,24 @@ Please contact Marieke Kleemans at kleemans@illinois.edu for questions
 ********************************************************************************
 *** Figure 1: Productivity Gap in Total Earnings
 ********************************************************************************
-use "Main_Analysis_IFLS.dta", clear														
+use "Main_Analysis_IFLS.dta", clear
 
-reg lninc urban, cluster(pidlink)			
+reg lninc urban, cluster(pidlink)
 estadd local timeFE "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
-reg lninc urban lnhour lnhour_sq female age age_sq educyr educyr_sq i.year, cluster(pidlink)		
+reg lninc urban lnhour lnhour_sq female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store F
-xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
@@ -110,12 +110,12 @@ estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store F
-xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
@@ -214,12 +214,12 @@ est store G
 	graph save "Figure1_IFLS_agnonag.gph", replace
 
 	restore
-	
-	
-********************************************************************************		
+
+
+********************************************************************************
 *** Figure 3: Event Study of Urban Migration
 ********************************************************************************
-	preserve	
+	preserve
 
 	sort pidlink year
 	by pidlink: gen obsnum = _n
@@ -307,7 +307,7 @@ gen eventime = year - firstmoveR2U
 		matrix coef[`i'+6,1] = `i'
 
 		if `i' <= -2 {
-		  
+
 		  matrix coef[`i'+6,2] = _b[timedum_`=-`i'']
 			matrix coef[`i'+6,3] = _b[timedum_`=-`i''] - _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
 			matrix coef[`i'+6,4] = _b[timedum_`=-`i''] + _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
@@ -316,14 +316,14 @@ gen eventime = year - firstmoveR2U
 			matrix coef[`i'+6,8] = 0
 		}
 		if `i' == -1 {
-		  
+
 		  matrix coef[`i'+6,2] = 0
-			
+
 			matrix coef[`i'+6,5] = 0
 			matrix coef[`i'+6,8] = 0
 		}
 		if `i' >= 0 {
-		  
+
 			matrix coef[`i'+6,2] = _b[timedum`i']
 			matrix coef[`i'+6,3] = _b[timedum`i'] - _se[timedum`i']*invttail(e(df_r), 0.025)
 			matrix coef[`i'+6,4] = _b[timedum`i'] + _se[timedum`i']*invttail(e(df_r), 0.025)
@@ -332,7 +332,7 @@ gen eventime = year - firstmoveR2U
 			matrix coef[`i'+6,5] = 100*r(mean)
 			matrix coef[`i'+6,6] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef[`i'+6,7] = 100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
-	
+
 			quietly sum stillurban if eventime==`i'
 			matrix coef[`i'+6,8] = 100*r(mean)
 			matrix coef[`i'+6,9] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
@@ -378,12 +378,12 @@ gen eventime = year - firstmoveR2U
 		if `i' == -1 {
 
 		  matrix coef_jakarta[`i'+6,2] = 0
-			
+
 			matrix coef_jakarta[`i'+6,5] = 0
 			matrix coef_jakarta[`i'+6,8] = 0
 		}
 		if `i' >= 0 {
-	
+
 			matrix coef_jakarta[`i'+6,2] = _b[timedum_jakarta`i']
 			matrix coef_jakarta[`i'+6,3] = _b[timedum_jakarta`i'] - _se[timedum_jakarta`i']*invttail(e(df_r), 0.025)
 			matrix coef_jakarta[`i'+6,4] = _b[timedum_jakarta`i'] + _se[timedum_jakarta`i']*invttail(e(df_r), 0.025)
@@ -392,28 +392,28 @@ gen eventime = year - firstmoveR2U
 			matrix coef_jakarta[`i'+6,5] = 100*r(mean)
 			matrix coef_jakarta[`i'+6,6] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_jakarta[`i'+6,7] = 100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
-		
+
 			quietly sum stillurban_jakarta if eventime==`i'
 			matrix coef_jakarta[`i'+6,8] = 100*r(mean)
 			matrix coef_jakarta[`i'+6,9] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_jakarta[`i'+6,10] =100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 		}
 
-		
+
 		if `i' <= -2 {
-		  
+
 		  matrix coef_notjakarta[`i'+6,2] = _b[timedum_notjakarta_`=-`i'']
 			matrix coef_notjakarta[`i'+6,3] = _b[timedum_notjakarta_`=-`i''] - _se[timedum_notjakarta_`=-`i'']*invttail(e(df_r), 0.025)
 			matrix coef_notjakarta[`i'+6,4] = _b[timedum_notjakarta_`=-`i''] + _se[timedum_notjakarta_`=-`i'']*invttail(e(df_r), 0.025)
 
-			
+
 			matrix coef_notjakarta[`i'+6,5] = 0
 			matrix coef_notjakarta[`i'+6,8] = 0
 		}
 		if `i' == -1 {
-		  
+
 		  matrix coef_notjakarta[`i'+6,2] = 0
-			
+
 			matrix coef_notjakarta[`i'+6,5] = 0
 			matrix coef_notjakarta[`i'+6,8] = 0
 		}
@@ -444,7 +444,7 @@ gen eventime = year - firstmoveR2U
 								endpoint_survivor_post endpoint_notsurvivor_post /// pooled endpoints for survivors
 								age_sq i.year , ///
 	  fe i(pidlink) cluster(pidlink) robust // controls
-	  
+
 
 	matrix coef_survivor = J(11,10,.)
 	matrix coef_notsurvivor = J(11,10,.)
@@ -465,7 +465,7 @@ gen eventime = year - firstmoveR2U
 		matrix coef_notsurvivor[`i'+6,1] = `i'
 
 		if `i' <= -2 {
-		  
+
 		  matrix coef_survivor[`i'+6,2] = _b[timedum_`=-`i'']
 			matrix coef_survivor[`i'+6,3] = _b[timedum_`=-`i''] - _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
 			matrix coef_survivor[`i'+6,4] = _b[timedum_`=-`i''] + _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
@@ -474,14 +474,14 @@ gen eventime = year - firstmoveR2U
 			matrix coef_survivor[`i'+6,8] = 0
 		}
 		if `i' == -1 {
-		  
+
 		  matrix coef_survivor[`i'+6,2] = 0
-			
+
 			matrix coef_survivor[`i'+6,5] = 0
 			matrix coef_survivor[`i'+6,8] = 0
 		}
 		if `i' == 0 {
-			
+
 		  matrix coef_survivor[`i'+6,2] = _b[timedum0]
 			matrix coef_survivor[`i'+6,3] = _b[timedum0] - _se[timedum0]*invttail(e(df_r), 0.025)
 			matrix coef_survivor[`i'+6,4] = _b[timedum0] + _se[timedum0]*invttail(e(df_r), 0.025)
@@ -490,23 +490,23 @@ gen eventime = year - firstmoveR2U
 			matrix coef_survivor[`i'+6,5] = 100*r(mean)
 			matrix coef_survivor[`i'+6,6] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_survivor[`i'+6,7] = 100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
-			
+
 			quietly sum stillurban if eventime==`i'
 			matrix coef_survivor[`i'+6,8] = 100*r(mean)
 			matrix coef_survivor[`i'+6,9] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_survivor[`i'+6,10] =100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 		}
 		if `i' > 0 {
-		  
+
 			matrix coef_survivor[`i'+6,2] = _b[timedum_survivor`i']
 			matrix coef_survivor[`i'+6,3] = _b[timedum_survivor`i'] - _se[timedum_survivor`i']*invttail(e(df_r), 0.025)
 			matrix coef_survivor[`i'+6,4] = _b[timedum_survivor`i'] + _se[timedum_survivor`i']*invttail(e(df_r), 0.025)
-			
+
 			quietly sum urban if eventime==`i'
 			matrix coef_survivor[`i'+6,5] = 100*r(mean)
 			matrix coef_survivor[`i'+6,6] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_survivor[`i'+6,7] = 100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
-			
+
 			quietly sum stillurban if eventime==`i'
 			matrix coef_survivor[`i'+6,8] = 100*r(mean)
 			matrix coef_survivor[`i'+6,9] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
@@ -520,7 +520,7 @@ gen eventime = year - firstmoveR2U
 
 		}
 		if `i' > 0 {
-		  
+
 			matrix coef_notsurvivor[`i'+6,2] = _b[timedum_notsurvivor`i']
 			matrix coef_notsurvivor[`i'+6,3] = coef_notsurvivor[`i'+6,2] - _se[timedum_notsurvivor`i']*invttail(e(df_r), 0.025)
 			matrix coef_notsurvivor[`i'+6,4] = coef_notsurvivor[`i'+6,2] + _se[timedum_notsurvivor`i']*invttail(e(df_r), 0.025)
@@ -581,9 +581,9 @@ gen eventime = year - firstmoveR2U
 	graph set eps fontface default
 
 	restore
-	
-	
-********************************************************************************		
+
+
+********************************************************************************
 *** Table 1: Non-Agriculture/Agriculture and Urban/Rural
 ********************************************************************************
 preserve
@@ -629,8 +629,8 @@ esttab matrix(xtab, fmt("%7.4f %7.4f %10.0fc" "%7.4f %7.4f %10.0fc"  "%7.4f %7.4
 restore
 
 
-********************************************************************************		
-*** Table 2_IFLS: Summary Statistics											 
+********************************************************************************
+*** Table 2_IFLS: Summary Statistics
 ********************************************************************************
 preserve
 *** Education dummies
@@ -650,7 +650,7 @@ preserve
   *** Rural-to-Urban migrants
   gen migrRU_ever = always_rural==0 & urban_birth==0
   gen migrUR_ever = always_urban==0 & urban_birth==1
-  
+
   egen nonag_ever = max(nonag) , by(pidlink)
 *** Collapse the data to the individual level
   collapse (first) ravens_norm educpri educsec educcol female ///
@@ -716,77 +716,95 @@ preserve
 	legend ///
 	booktabs
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table 3: Correlates of Employment in Non-Agriculture and Urban Migration
 ********************************************************************************
 keep pidlink migrRU_ever nonag_ever educpri educsec educcol female ravens_norm always_rural
-save "Table3_IFLS.dta", replace							
-restore																	
+save "Table3_IFLS.dta", replace
+restore
 
 
 ********************************************************************************
 *** Table 4: Non-Agricultural/Agricultural Gap in Earnings
 ********************************************************************************
-reg lninc nonag, cluster(pidlink)					
-estadd local timeFE "N" , replace					
+
+*Column 1: OLS, raw gap
+reg lninc nonag, cluster(pidlink)
+estadd local timeFE "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
+
+*Column 2: time fixed effects and controls for log hours and log hours squared
 reg lninc nonag lnhour lnhour_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store B
+
+*Column 3: all adjustments from Col 2 plus indicator for female, education yrs, edu yrs sqrd
 reg lninc nonag lnhour lnhour_sq female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
+
+*Column 4: all adjustments from Col 3 plus scores from Raven's Matrices tests
 reg lninc nonag lnhour lnhour_sq female age age_sq educyr educyr_sq ravens_norm ravens_norm_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store D
+
+*Column 5: all adjustments from Col 3 and limit sample to those that have productivity measures in ag and nonag
 reg lninc nonag lnhour lnhour_sq female age age_sq educyr educyr_sq i.year if NA_mover == 1, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "N" , replace
 estadd local moverUonly "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store E
-xtreg lninc nonag age_sq i.year, fe i(pidlink) cluster(pidlink)		
-estadd local timeFE "Y" , replace
-estadd local indFE "Y" , replace
-estadd local cluster `e(N_clust)', replace
-est store F																	
-xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
-estadd local timeFE "Y" , replace
-estadd local indFE "Y" , replace
-estadd local cluster `e(N_clust)', replace
-est store G																		
-xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)		
-estadd local timeFE "Y" , replace
-estadd local indFE "Y" , replace
-estadd local cluster `e(N_clust)', replace
-est store H																		
-xtreg lninc_h_real nonag age_sq i.year, fe i(pidlink) cluster(pidlink)			
-estadd local timeFE "Y" , replace
-estadd local indFE "Y" , replace
-estadd local cluster `e(N_clust)', replace
-est store I																		
 
-esttab A B C D E F G H I using "Table4_IFLS.tex", replace f ///			
+*Column 6: individual FE, time FE, no hours control
+xtreg lninc nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
+estadd local timeFE "Y" , replace
+estadd local indFE "Y" , replace
+estadd local cluster `e(N_clust)', replace
+est store F
+
+*Column 7: individual FE, time FE, log hours and log hours sqrd
+xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
+estadd local timeFE "Y" , replace
+estadd local indFE "Y" , replace
+estadd local cluster `e(N_clust)', replace
+est store G
+
+*Column 8: using wage as dependent var (tot earnings / hrs worked), same specifications as Col 6
+xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
+estadd local timeFE "Y" , replace
+estadd local indFE "Y" , replace
+estadd local cluster `e(N_clust)', replace
+est store H
+
+*Column 9: same specification as Col 8, adjusting for urban prices
+xtreg lninc_h_real nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
+estadd local timeFE "Y" , replace
+estadd local indFE "Y" , replace
+estadd local cluster `e(N_clust)', replace
+est store I
+
+esttab A B C D E F G H I using "Table4_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons *year* age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "" "" "" "" "Log Wage" "Log Real Wage")  /// 
+	mtitle("" "" "" "" "" "" "" "Log Wage" "Log Real Wage")  ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE timeFE moverUonly N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
-	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))	
-	
-	
-********************************************************************************		
+	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
+
+
+********************************************************************************
 *** Table 5: Urban/Rural Gap in Earnings
 ********************************************************************************
 reg lninc urban, cluster(pidlink)
@@ -815,39 +833,39 @@ estadd local indFE "N" , replace
 estadd local moverUonly "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store E
-xtreg lninc urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store F
-xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
-xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store H
-xtreg lninc_h_real urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h_real urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store I
 
 esttab A B C D E F G H I using "Table5_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons *year* age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "" "" "" "" "Log Wage" "Log Real Wage")  /// 
+	mtitle("" "" "" "" "" "" "" "Log Wage" "Log Real Wage")  ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE timeFE moverUonly N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table 6: Gap in Earnings, Indonesia. For Individuals Born Rural and Urban
 ********************************************************************************
 *** Panel A
@@ -867,23 +885,23 @@ estadd local indFE "N" , replace
 estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
-est store H																		
+est store H
 
 esttab A C H using "Table6_IFLS_rural.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
-	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
+	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "Log Wage")  /// 
+	mtitle("" "" "Log Wage")  ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
-	
+
 restore
 
 
@@ -905,7 +923,7 @@ estadd local indFE "N" , replace
 estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local contr "Y" , replace
@@ -913,12 +931,12 @@ estadd local cluster `e(N_clust)', replace
 est store H
 
 esttab A C H using "Table6_IFLS_urban.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
-	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
+	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "Log Wage")  /// 
+	mtitle("" "" "Log Wage")  ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
@@ -953,7 +971,7 @@ preserve
 	  (line coef_survivor eventime, lcolor(black) lwidth(medthick)) ///
 	  (line coef_notsurvivor eventime, lcolor(gs10) lwidth(medthick)) ///
 		(pcarrowi 0.8 -1.2 0.8 -1.7, lcolor(black) mcolor(black) mlabcolor(black)) ///
-		(pcarrowi 0.8 -0.8 0.8 -0.3, lcolor(black) mcolor(black) mlabcolor(black)), /// 
+		(pcarrowi 0.8 -0.8 0.8 -0.3, lcolor(black) mcolor(black) mlabcolor(black)), ///
 		text(0.88 -1.54 "Rural") ///
 		text(0.88 -0.4 "Urban") ///
 		xline(-1, lcolor(black) lpattern(dot)) ///
@@ -1011,7 +1029,7 @@ preserve
 	gen temp = year if moveU2R == 1
 	egen firstmoveU2R = min(temp) , by(pidlink)
 	drop temp
-	
+
 	gen eventime = year - firstmoveU2R
 
 	forvalues i = -5/5 {
@@ -1063,7 +1081,7 @@ preserve
 		matrix coef_u2r[`i'+6,1] = `i'
 
 		if `i' <= -2 {
-		  
+
 		  matrix coef_u2r[`i'+6,2] = _b[timedum_`=-`i'']
 			matrix coef_u2r[`i'+6,3] = _b[timedum_`=-`i''] - _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
 			matrix coef_u2r[`i'+6,4] = _b[timedum_`=-`i''] + _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
@@ -1072,23 +1090,23 @@ preserve
 			matrix coef_u2r[`i'+6,8] = 0
 		}
 		if `i' == -1 {
-		  
+
 		  matrix coef_u2r[`i'+6,2] = 0
-			
+
 			matrix coef_u2r[`i'+6,5] = 0
 			matrix coef_u2r[`i'+6,8] = 0
 		}
 		if `i' >= 0 {
-		  
+
 			matrix coef_u2r[`i'+6,2] = _b[timedum`i']
 			matrix coef_u2r[`i'+6,3] = _b[timedum`i'] - _se[timedum`i']*invttail(e(df_r), 0.025)
 			matrix coef_u2r[`i'+6,4] = _b[timedum`i'] + _se[timedum`i']*invttail(e(df_r), 0.025)
-			
+
 			quietly sum urban if eventime==`i'
 			matrix coef_u2r[`i'+6,5] = 100*r(mean)
 			matrix coef_u2r[`i'+6,6] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_u2r[`i'+6,7] = 100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
-			
+
 			quietly sum stillurban if eventime==`i'
 			matrix coef_u2r[`i'+6,8] = 100*r(mean)
 			matrix coef_u2r[`i'+6,9] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
@@ -1123,7 +1141,7 @@ preserve
 		matrix coef_u2r_notsurvivor[`i'+6,1] = `i'
 
 		if `i' <= -2 {
-		  
+
 		  matrix coef_u2r_survivor[`i'+6,2] = _b[timedum_`=-`i'']
 			matrix coef_u2r_survivor[`i'+6,3] = _b[timedum_`=-`i''] - _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
 			matrix coef_u2r_survivor[`i'+6,4] = _b[timedum_`=-`i''] + _se[timedum_`=-`i'']*invttail(e(df_r), 0.025)
@@ -1132,14 +1150,14 @@ preserve
 			matrix coef_u2r_survivor[`i'+6,8] = 0
 		}
 		if `i' == -1 {
-		  
+
 		  matrix coef_u2r_survivor[`i'+6,2] = 0
-			
+
 			matrix coef_u2r_survivor[`i'+6,5] = 0
 			matrix coef_u2r_survivor[`i'+6,8] = 0
 		}
 		if `i' == 0 {
-			
+
 		  matrix coef_u2r_survivor[`i'+6,2] = _b[timedum0]
 			matrix coef_u2r_survivor[`i'+6,3] = _b[timedum0] - _se[timedum0]*invttail(e(df_r), 0.025)
 			matrix coef_u2r_survivor[`i'+6,4] = _b[timedum0] + _se[timedum0]*invttail(e(df_r), 0.025)
@@ -1148,23 +1166,23 @@ preserve
 			matrix coef_u2r_survivor[`i'+6,5] = 100*r(mean)
 			matrix coef_u2r_survivor[`i'+6,6] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_u2r_survivor[`i'+6,7] = 100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
-			
+
 			quietly sum stillurban if eventime==`i'
 			matrix coef_u2r_survivor[`i'+6,8] = 100*r(mean)
 			matrix coef_u2r_survivor[`i'+6,9] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_u2r_survivor[`i'+6,10] =100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 		}
 		if `i' > 0 {
-		  
+
 			matrix coef_u2r_survivor[`i'+6,2] = _b[timedum_survivor`i']
 			matrix coef_u2r_survivor[`i'+6,3] = _b[timedum_survivor`i'] - _se[timedum_survivor`i']*invttail(e(df_r), 0.025)
 			matrix coef_u2r_survivor[`i'+6,4] = _b[timedum_survivor`i'] + _se[timedum_survivor`i']*invttail(e(df_r), 0.025)
-			
+
 			quietly sum urban if eventime==`i'
 			matrix coef_u2r_survivor[`i'+6,5] = 100*r(mean)
 			matrix coef_u2r_survivor[`i'+6,6] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
 			matrix coef_u2r_survivor[`i'+6,7] = 100*min(max(r(mean) + r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
-			
+
 			quietly sum stillurban if eventime==`i'
 			matrix coef_u2r_survivor[`i'+6,8] = 100*r(mean)
 			matrix coef_u2r_survivor[`i'+6,9] = 100*min(max(r(mean) - r(sd)/sqrt(r(N))*invttail(r(N)-1, 0.025),0),1)
@@ -1178,7 +1196,7 @@ preserve
 
 		}
 		if `i' > 0 {
-		  
+
 			matrix coef_u2r_notsurvivor[`i'+6,2] = _b[timedum_notsurvivor`i']
 			matrix coef_u2r_notsurvivor[`i'+6,3] = coef_u2r_notsurvivor[`i'+6,2] - _se[timedum_notsurvivor`i']*invttail(e(df_r), 0.025)
 			matrix coef_u2r_notsurvivor[`i'+6,4] = coef_u2r_notsurvivor[`i'+6,2] + _se[timedum_notsurvivor`i']*invttail(e(df_r), 0.025)
@@ -1215,7 +1233,7 @@ preserve
 		ytitle("Urban Wage Gap (log points)") ///
 		name(eventstudy_ifls_u2r, replace) ///
 		nodraw
-*** Graph Survival Rate in Urban areas		
+*** Graph Survival Rate in Urban areas
 	graph twoway ///
 		(line hazard_cont_lci eventime if eventime >= 0 , lwidth(thin) lcolor(black) lpattern(dash) cmissing(n)) ///
 		(line hazard_cont_uci eventime if eventime >= 0 , lwidth(thin) lcolor(black) lpattern(dash) cmissing(n)) ///
@@ -1327,7 +1345,7 @@ restore
 ********************************************************************************
 use "Intergen_Analysis_IFLS.dta", clear
 xtset pidlink year
-tostring fath_pidlink moth_pidlink, replace								
+tostring fath_pidlink moth_pidlink, replace
 
 tempfile dadfile momfile
 
@@ -1370,13 +1388,13 @@ foreach parent in fath moth {
 	keep pidlink `parent'_pidlink
 	drop if missing(`parent'_pidlink)
 	duplicates drop
-	destring `parent'_pidlink, replace 
+	destring `parent'_pidlink, replace
 	egen check = count(`parent'_pidlink), by(pidlink)
 	count if check > 1
 	assert r(N) == 0
-	tostring `parent'_pidlink, replace		
+	tostring `parent'_pidlink, replace
 	save ``parent'link'
-	restore	
+	restore
 }
 
 drop fath_pidlink moth_pidlink
@@ -1465,12 +1483,12 @@ graph twoway ///
 		ytitle("Density") xtitle("Raven's Score, Normalized") ///
 		legend(label(1 "Born Rural") label(2 "Born Urban"))
 graph export "FigureA7_IFLS.eps", replace
-						
+
 
 ********************************************************************************
 *** Figure A8: Joint Distribution of Rural and Urban Productivities
 ********************************************************************************
-use "Main_Analysis_IFLS.dta", clear														
+use "Main_Analysis_IFLS.dta", clear
 preserve
 
 capture program drop crc_boot
@@ -1658,7 +1676,7 @@ graph set eps fontface default
   text(`=`y_pos'-0.45' 3.2 "     (`: di %4.3f bstat[2,3]')", placement(se)) ///
 	name(ur_scatter_urban, replace) ///
 	nodraw
-	
+
 *** Histogram of urban fixed effect for those who move
   quietly sum fe_u if obsnum==1 & !missing(fe_r) & urban_birth==1
   graph twoway ///
@@ -1677,7 +1695,7 @@ graph set eps fontface default
 	legend(off) ///
 	name(ur_hist_u_urbanmigrants, replace) ///
 	nodraw
-	
+
 *** Histogram of urban fixed effect for those who don't move
   quietly sum fe_u if obsnum==1 & missing(fe_r) & urban_birth==1
   graph twoway ///
@@ -1697,7 +1715,7 @@ graph set eps fontface default
 	legend(off) ///
 	name(ur_hist_u_urbannonmigrants, replace) ///
 	nodraw
-	
+
 *** Rural fixed effect for those who move
   quietly sum fe_r if obsnum==1 & !missing(fe_u) & urban_birth==1
   graph twoway ///
@@ -1728,28 +1746,28 @@ graph set eps fontface default
 	imargin(0 0 0 0)
 
   graph export "FigureA8_IFLS_urban.eps" , replace
-	
+
 	graph set eps fontface default
 
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A1: Correlates of Employment in Non-Agriculture
-********************************************************************************		
+********************************************************************************
 preserve
- 
+
   gen educpri = educlv >= 1 if !missing(educlv)
   gen educsec = educlv >= 3 if !missing(educlv)
   gen educcol = educlv == 4 if !missing(educlv)
 
   egen always_rural = max(max(urban,urban_birth)), by(pidlink)
   replace always_rural = 1 - always_rural
-  
+
   egen always_urban = min(min(urban,urban_birth)), by(pidlink)
 
 	  gen rural_nonmigrants = migr_ever == 0 & always_rural == 1
-   
+
 	  gen migrRR_ever = always_rural==1 & migr_ever==1
 
   gen migrRU_ever = always_rural==0 & urban_birth==0
@@ -1842,10 +1860,10 @@ preserve
 	  booktabs ///
 	  width(\hsize)
 
-	  
-********************************************************************************		
+
+********************************************************************************
 *** Table A2: Correlates of Urban Migration
-********************************************************************************		
+********************************************************************************
 *** Regression predicting rural-urban migrants relative to always rural
   local regs
 
@@ -1866,7 +1884,7 @@ preserve
 	  width(\hsize)
 
 	local regs
- 
+
 
   foreach var of varlist educpri educsec educcol female ravens_norm {
     eststo `var': reg migrRU_ever `var' if (always_rural==1 | migrRU_ever==1), robust
@@ -1890,8 +1908,8 @@ preserve
 	  booktabs ///
 	  width(\hsize)
 
-	  
-********************************************************************************		
+
+********************************************************************************
 *** Table A3: Correlates of Employment in Non-Agriculture—Indonesia (Born Urban)
 ********************************************************************************
 *** Regression predicting ag-nonag relative to always urban
@@ -1917,8 +1935,8 @@ preserve
 	  booktabs ///
 	  width(\hsize)
 
-	  
-********************************************************************************		
+
+********************************************************************************
 *** Table A4: Correlates of Rural Migration—Indonesia (Born Urban)
 ********************************************************************************
 *** Regression predicting urban-rural migrants relative to always urban
@@ -1949,7 +1967,7 @@ preserve
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A6: Non-Agricultural/Agricultural Gap in Earnings using Alternative Definition of Agriculture
 ********************************************************************************
 *** nonagonly
@@ -1965,19 +1983,19 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc nonagonly lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc nonagonly lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
-est store G																		
-xtreg lninc_h nonagonly age_sq i.year, fe i(pidlink) cluster(pidlink)			
+est store G
+xtreg lninc_h nonagonly age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
-est store H																		
-	
+est store H
+
 *** nonagany
 reg lninc nonagany, cluster(pidlink)
 estadd local timeFE "N" , replace
@@ -1991,31 +2009,31 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lninc nonagany lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc nonagany lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
-est store GG																	
-xtreg lninc_h nonagany age_sq i.year, fe i(pidlink) cluster(pidlink)			
+est store GG
+xtreg lninc_h nonagany age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
-est store HH																	
+est store HH
 
 esttab A C G H AA CC GG HH using "TableA6_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
-	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
+	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
 	mtitle("" "" "" "Log Wage" "" "" "" "Log Wage")  ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A7: Non-Agricultural/Agricultural Gap in Earnings Within Rural Areas
 ********************************************************************************
 preserve
@@ -2034,13 +2052,13 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
-xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -2048,19 +2066,19 @@ estadd local cluster `e(N_clust)', replace
 est store H
 
 esttab A C G H using "TableA7_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "Log Wage")  /// 
+	mtitle("" "" "" "Log Wage")  ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A8: Non-Agricultural/Agricultural Gap in Hours Worked
 ********************************************************************************
 reg lnhour nonag, cluster(pidlink)
@@ -2084,24 +2102,24 @@ estadd local indFE "N" , replace
 estadd local moverUonly "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store E
-xtreg lnhour nonag age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lnhour nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
 
 esttab A C D E G using "TableA8_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons *year* age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "" "" "")  /// 
+	mtitle("" "" "" "" "" "")  ///
 	mgroups("Dependent variable: Log Hours", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE timeFE moverUonly N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A9: Urban/Rural Gap in Hours Worked
 ********************************************************************************
 reg lnhour urban, cluster(pidlink)
@@ -2125,24 +2143,24 @@ estadd local indFE "N" , replace
 estadd local moverUonly "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store E
-xtreg lnhour urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lnhour urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
 
 esttab A C D E G using "TableA9_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons *year* age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "" "" "")  /// 
+	mtitle("" "" "" "" "" "")  ///
 	mgroups("Dependent variable: Log Hours", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE timeFE moverUonly N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Time fixed effects"' `"Switchers only"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A10: Robustness to Alternative Agricultural Productivity Measures
 ********************************************************************************
 *** Wage
@@ -2261,7 +2279,7 @@ count if first_inforinc==1
 drop has_forinc first_forinc has_inforinc first_inforinc
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A11: Gap in Earnings for those Aged 30 or Younger, Indonesia
 ********************************************************************************
 preserve
@@ -2281,13 +2299,13 @@ estadd local indFE "N" , replace
 estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
-xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local contr "Y" , replace
@@ -2307,13 +2325,13 @@ estadd local indFE "N" , replace
 estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
-xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local indFE "Y" , replace
 estadd local contr "Y" , replace
@@ -2333,7 +2351,7 @@ esttab AA CC GG HH A C G H using "TableA11_IFLS.tex", replace f ///
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A12: Gap in Wage Earnings
 ********************************************************************************
 preserve
@@ -2355,13 +2373,13 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lnforinc nonag lnforhour lnforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lnforinc nonag lnforhour lnforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
-xtreg lnforinc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lnforinc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -2379,13 +2397,13 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lnforinc urban lnforhour lnforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lnforinc urban lnforhour lnforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
-xtreg lnforinc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lnforinc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -2393,20 +2411,20 @@ estadd local cluster `e(N_clust)', replace
 est store HH
 
 esttab A C G H AA CC GG HH using "TableA12_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
-	drop(_cons lnforhour lnforhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
+	drop(_cons lnforhour lnforhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "Log Wage" "" "" "" "Log Wage")  /// 
+	mtitle("" "" "" "Log Wage" "" "" "" "Log Wage")  ///
 	mgroups("Dependent variable: Log Wage Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(nonag urban) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A13: Gap in Self-Employment Earnings
 ********************************************************************************
 preserve
@@ -2428,13 +2446,13 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninforinc nonag lninforhour lninforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninforinc nonag lninforhour lninforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
-xtreg lninforinc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninforinc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -2452,33 +2470,33 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lninforinc urban lninforhour lninforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninforinc urban lninforhour lninforhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
-xtreg lninforinc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninforinc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
 esttab A C G H AA CC GG HH using "TableA13_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
-	drop(_cons lninforhour lninforhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
+	drop(_cons lninforhour lninforhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "Log Wage" "" "" "" "Log Wage")  /// 
+	mtitle("" "" "" "Log Wage" "" "" "" "Log Wage")  ///
 	mgroups("Dependent variable: Log Self-Employment Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(nonag urban) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
 restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A16: Alternative Coefficient Standard Error Estimation
 ********************************************************************************
 run "6. Cr23_ik_css_mod.do"
@@ -2600,7 +2618,7 @@ matrix stderr_young = vecdiag(temp)
 estadd matrix stderr_young: C
 
 
-xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc urban lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 est store F
 estadd local contr "Y" , replace: F
 estadd local indFE "Y" , replace: F
@@ -2652,7 +2670,7 @@ matrix stderr_young = vecdiag(temp)
 
 estadd matrix stderr_young: F
 
-xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 est store G
 estadd local contr "Y" , replace: G
 estadd local indFE "Y" , replace: G
@@ -2781,7 +2799,7 @@ matrix stderr_young = vecdiag(temp)
 
 estadd matrix stderr_young: CC
 
-xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc nonag lnhour lnhour_sq age_sq i.year, fe i(pidlink) cluster(pidlink)
 est store FF
 estadd local contr "Y" , replace: FF
 estadd local indFE "Y" , replace: FF
@@ -2829,7 +2847,7 @@ matrix stderr_young = vecdiag(temp)
 estadd matrix stderr_young: FF
 
 
-xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 est store GG
 estadd local contr "Y" , replace: GG
 estadd local indFE "Y" , replace: GG
@@ -2877,20 +2895,20 @@ estadd matrix stderr_young: GG
 esttab AA CC FF GG A C F G using "TableA16_IFLS.tex", replace type f ///
   cells(b(fmt(3)star) stderr_default(par(( ))) stderr_cr2(par([ ])) stderr_cr3(par(`"\$\\llbracket\$"' `"\$\\rrbracket\$"')) stderr_bootstrap(par(\{ \})) stderr_young(par(`"\$\\langle\$"' `"\$\\rangle\$"'))) ///
 	keep(urban nonag) ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	mtitle("" "" "" "Log Wage" "" "" "" "Log Wage")  /// 
+	mtitle("" "" "" "Log Wage" "" "" "" "Log Wage")  ///
 	mgroups("Dependent variable: Log Earnings", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A17: Integenerational Correlations of Cognitive Measures
 ********************************************************************************
-use "Intergen_Analysis_IFLS.dta", clear								
+use "Intergen_Analysis_IFLS.dta", clear
 xtset pidlink year
-tostring fath_pidlink moth_pidlink, replace										
+tostring fath_pidlink moth_pidlink, replace
 
 tempfile dadfile momfile
 
@@ -2933,13 +2951,13 @@ foreach parent in fath moth {
 	keep pidlink `parent'_pidlink
 	drop if missing(`parent'_pidlink)
 	duplicates drop
-	destring `parent'_pidlink, replace	
+	destring `parent'_pidlink, replace
 	egen check = count(`parent'_pidlink), by(pidlink)
-	tostring `parent'_pidlink, replace				
+	tostring `parent'_pidlink, replace
 	count if check > 1
 	assert r(N) == 0
 	save ``parent'link'
-	restore	
+	restore
 }
 
 drop fath_pidlink moth_pidlink
@@ -3048,8 +3066,8 @@ esttab raven_regb* using "TableA17_IFLS.tex", ///
 		layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}")) ///
 	nonotes
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A19: Gaps in Consumption
 ********************************************************************************
 *** Regression total consumption - full sample
@@ -3070,13 +3088,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
-reg lncons_tot nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lncons_tot nonag age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_tot nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3088,13 +3106,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA
-reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)	
+xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3102,18 +3120,18 @@ estadd local cluster `e(N_clust)', replace
 est store GG
 
 esttab A C G AA CC GG using "TableA19_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	
-	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	
-	star(* 0.10 ** 0.05 *** 0.01) /// 
-	nomtitles /// 
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
+	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
+	star(* 0.10 ** 0.05 *** 0.01) ///
+	nomtitles ///
 	mgroups("Dependent variable: Log Consumption", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(nonag urban) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A20: Gap in Food and Non-Food Consumption, Indonesia
 ********************************************************************************
 *** Regression food consumption - full sample
@@ -3123,13 +3141,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
-reg lncons_food nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_food nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lncons_food nonag age_sq i.year, fe i(pidlink) cluster(pidlink)	
+xtreg lncons_food nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3141,13 +3159,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA
-reg lncons_food urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_food urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lncons_food urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_food urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3155,13 +3173,13 @@ estadd local cluster `e(N_clust)', replace
 est store GG
 
 esttab A C G AA CC GG using "TableA20_IFLS_food.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	
-	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	
-	star(* 0.10 ** 0.05 *** 0.01) /// 
-	nomtitles /// 
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
+	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
+	star(* 0.10 ** 0.05 *** 0.01) ///
+	nomtitles ///
 	mgroups("Dependent variable: Log Food Consumption", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(nonag urban) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
@@ -3171,13 +3189,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
-reg lncons_nfood nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)					
+reg lncons_nfood nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lncons_nfood nonag age_sq i.year, fe i(pidlink) cluster(pidlink)	
+xtreg lncons_nfood nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3189,13 +3207,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA
-reg lncons_nfood urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_nfood urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lncons_nfood urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_nfood urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3213,14 +3231,14 @@ esttab A C G AA CC GG using "TableA20_IFLS_nfood.tex", replace f ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
-restore	
+restore
 
 
-********************************************************************************		
+********************************************************************************
 *** Table A21: Gap in Consumption (Main Analysis Sample), Indonesia
 ********************************************************************************
 *** Regression total consumption
-use "Main_Analysis_IFLS.dta", clear														
+use "Main_Analysis_IFLS.dta", clear
 
 keep if !missing(lncons_tot)
 keep if !missing(lncons_food)
@@ -3232,13 +3250,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
-reg lncons_tot nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lncons_tot nonag age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_tot nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3250,13 +3268,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA
-reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3264,13 +3282,13 @@ estadd local cluster `e(N_clust)', replace
 est store GG
 
 esttab A C G AA CC GG using "TableA21_IFLS_tot.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	
-	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	
-	star(* 0.10 ** 0.05 *** 0.01) /// 
-	nomtitles /// 
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
+	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
+	star(* 0.10 ** 0.05 *** 0.01) ///
+	nomtitles ///
 	mgroups("Dependent variable: Log Consumption", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(nonag urban) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
@@ -3281,13 +3299,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
-reg lncons_food nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_food nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lncons_food nonag age_sq i.year, fe i(pidlink) cluster(pidlink)	
+xtreg lncons_food nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3299,13 +3317,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA
-reg lncons_food urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_food urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lncons_food urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_food urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3313,13 +3331,13 @@ estadd local cluster `e(N_clust)', replace
 est store GG
 
 esttab A C G AA CC GG using "TableA21_IFLS_food.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	
-	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	
-	star(* 0.10 ** 0.05 *** 0.01) /// 
-	nomtitles /// 
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
+	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
+	star(* 0.10 ** 0.05 *** 0.01) ///
+	nomtitles ///
 	mgroups("Dependent variable: Log Food Consumption", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(nonag urban) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
@@ -3330,13 +3348,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store A
-reg lncons_nfood nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)					
+reg lncons_nfood nonag female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lncons_nfood nonag age_sq i.year, fe i(pidlink) cluster(pidlink)	
+xtreg lncons_nfood nonag age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3348,13 +3366,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA
-reg lncons_nfood urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_nfood urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC
-xtreg lncons_nfood urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_nfood urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3362,21 +3380,21 @@ estadd local cluster `e(N_clust)', replace
 est store GG
 
 esttab A C G AA CC GG using "TableA21_IFLS_nfood.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	// female age age_sq educyr educyr_sq ravens_norm ravens_norm_sq
-	star(* 0.10 ** 0.05 *** 0.01) /// 
-	nomtitles /// 
+	star(* 0.10 ** 0.05 *** 0.01) ///
+	nomtitles ///
 	mgroups("Dependent variable: Log Non-Food Consumption", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(nonag urban) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A22: Gap in Consumption for those Born in Rural and Urban Areas, Indonesia
 ********************************************************************************
-use "Main_Analysis_IFLS.dta", clear														
+use "Main_Analysis_IFLS.dta", clear
 
 *** Regression total consumption - Full sample but only those born in rural area
 preserve
@@ -3388,13 +3406,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA_rural_IFLS
-reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC_rural_IFLS
-xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3413,13 +3431,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA_urban_IFLS
-reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC_urban_IFLS
-xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3448,13 +3466,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA_rural_IFLSall
-reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC_rural_IFLSall
-xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3472,13 +3490,13 @@ estadd local contr "N" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store AA_urban_IFLSall
-reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)						
+reg lncons_tot urban female age age_sq educyr educyr_sq i.year, cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store CC_urban_IFLSall
-xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)		
+xtreg lncons_tot urban age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3508,11 +3526,11 @@ esttab AA_urban_IFLSall CC_urban_IFLSall GG_urban_IFLSall AA_urban_IFLS CC_urban
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
-	
-********************************************************************************		
+
+********************************************************************************
 *** Table A23: Urban/Rural Gap in Wages for Top 5 Cities
 ********************************************************************************
-use "Main_Analysis_IFLS.dta", clear												
+use "Main_Analysis_IFLS.dta", clear
 *** Cities in top 5
 preserve
 keep if !missing(jakarta)
@@ -3539,7 +3557,7 @@ estadd local contr "Y" , replace
 estadd local indFE "N" , replace
 estadd local cluster `e(N_clust)', replace
 est store C
-xtreg lninc_h urban jakarta surabaya bandung medan bekasi age_sq i.year, fe i(pidlink) cluster(pidlink)			
+xtreg lninc_h urban jakarta surabaya bandung medan bekasi age_sq i.year, fe i(pidlink) cluster(pidlink)
 estadd local timeFE "Y" , replace
 estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
@@ -3547,13 +3565,13 @@ estadd local cluster `e(N_clust)', replace
 est store G
 
 esttab A0 A C G using "TableA23_IFLS.tex", replace f ///
-	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	
-	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	
+	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
+	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
-	nomtitles	/// 
+	nomtitles	///
 	mgroups("Dependent variable: Log Wages", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
 	order(urban jakarta surabaya bandung medan bekasi) 			///
-	cells("b(fmt(3)star)" "se(fmt(3)par)") ///	
+	cells("b(fmt(3)star)" "se(fmt(3)par)") ///
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
