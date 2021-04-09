@@ -19,7 +19,7 @@ est store B
 reg migrU_ever educpri educsec educcol female ravens, robust
 est store D
 
-esttab A B C D using "Table3.tex", replace f ///
+esttab A B C D using "results/tables/Table3.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S S S) collabels(none) ///	// drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
 	mgroups("\centering\shortstack{Dependent Variable:\\Non-Agricultural Employment}" "\centering\shortstack{Dependent Variable:\\Urban Migration}", pattern(1 0 1 0) prefix(\multicolumn{@span}{p{5.5cm}}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///

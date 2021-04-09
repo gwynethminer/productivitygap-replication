@@ -78,7 +78,7 @@ est store G
 	;
 	 #delimit cr
 
-	graph save "Figure1_IFLS_ruralurban.gph", replace
+	graph save "results/figures/Figure1_IFLS_ruralurban.gph", replace
 
 	restore
 
@@ -193,6 +193,6 @@ est store G
 	;
 	 #delimit cr
 
-	graph save "Figure1_IFLS_agnonag.gph", replace
+	graph save "results/figures/Figure1_IFLS_agnonag.gph", replace
 
 	restore

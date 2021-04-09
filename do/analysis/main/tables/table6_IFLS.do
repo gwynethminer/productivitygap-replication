@@ -25,7 +25,7 @@ estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store H
 
-esttab A C H using "Table6_IFLS_rural.tex", replace f ///
+esttab A C H using "results/tables/Table6_IFLS_rural.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///

@@ -402,7 +402,7 @@ gen eventime = yrmth - firstmoveR2U
 		graphregion(color(white) lcolor(white)) ///
 		ysize(6)
 
-	graph export "Figure3_KLPS.eps", replace
+	graph export "results/figures/Figure3_KLPS.eps", replace
 
 	graph set window fontface default
 	graph set eps fontface default

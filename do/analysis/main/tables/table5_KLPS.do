@@ -49,7 +49,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store I
 
-esttab A B C D E F G H I using "Table5_KLPS.tex", replace f ///
+esttab A B C D E F G H I using "results/tables/Table5_KLPS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons *yrmth* voced voced_treat_info voced_treat_voucher age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///

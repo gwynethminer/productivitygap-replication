@@ -33,7 +33,7 @@ matrix xtab[3,3] = r(N)
 
 
 esttab matrix(xtab, fmt("%7.4f %7.4f %10.0fc" "%7.4f %7.4f %10.0fc"  "%7.4f %7.4f %10.0fc" )) ///
-  using "Table1_KLPS_PanelB.tex", replace ///
+  using "results/tables/Table1_KLPS_PanelB.tex", replace ///
   type booktabs ///
   collabels("Rural" "Urban" "Total") ///
 	varlabels(r1 "Agriculture" r2 "Non-Agriculture" r3 "Number of Observations") ///
@@ -100,7 +100,7 @@ matrix xtab[2,3] = round(r(mean)*100, 0.1) + 0.0333
 matrix xtab[3,3] = r(N)
 
 esttab matrix(xtab, fmt("%7.4f %7.4f %10.0fc" "%7.4f %7.4f %10.0fc"  "%7.4f %7.4f %10.0fc" )) ///
-  using "Table1_KLPS_PanelC.tex", replace ///
+  using "results/tables/Table1_KLPS_PanelC.tex", replace ///
   type booktabs ///
   collabels("Rural" "Urban" "Total") ///
 	varlabels(r1 "Agriculture" r2 "Non-Agriculture" r3 "Number of Observations") ///

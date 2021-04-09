@@ -79,7 +79,7 @@ est store G
 	;
 	 #delimit cr
 
-	graph save "Figure1_KLPS_ruralurban.gph", replace
+	graph save "results/figures/Figure1_KLPS_ruralurban.gph", replace
 
 	restore
 
@@ -199,5 +199,5 @@ est store G
 	;
 	 #delimit cr
 
-	graph save "Figure1_KLPS_agnonag.gph", replace
+	graph save "results/figures/Figure1_KLPS_agnonag.gph", replace
 	restore

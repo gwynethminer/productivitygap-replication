@@ -48,7 +48,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store I
 
-esttab A B C D E F G H I using "Table5_IFLS.tex", replace f ///
+esttab A B C D E F G H I using "results/tables/Table5_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons *year* age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///

@@ -52,7 +52,7 @@ egen nonag_ever = max(nonag) , by(pupid)
 
 
   esttab all neverU migrU migrU migrU counts ///
-    using "Table2_KLPS.tex", replace type fragment ///
+    using "results/tables/Table2_KLPS.tex", replace type fragment ///
 	  cells(mean(pattern(1 1 1 0 0 0) fmt(%9.3f))& ///
           count(pattern(0 0 0 0 0 1) fmt(%9.0f)) ///
 	        sd(par([ ]) pattern(1 1 1 0 0 0) fmt(%9.3f))) ///

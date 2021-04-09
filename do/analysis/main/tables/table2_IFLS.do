@@ -54,7 +54,7 @@ preserve
   local num_always_urban = r(N)
 
   esttab all always_rural migrRU_ever always_urban migrUR_ever counts ///
-    using "Table2_IFLS.tex", replace type fragment ///
+    using "results/tables/Table2_IFLS.tex", replace type fragment ///
 	cells(mean(pattern(1 1 1 1 1 0) fmt(%9.3f))& ///
           count(pattern(0 0 0 0 0 1) fmt(%9.0f)) ///
 	      sd(par([ ]) pattern(1 1 1 1 1 0) fmt(%9.3f))) ///
