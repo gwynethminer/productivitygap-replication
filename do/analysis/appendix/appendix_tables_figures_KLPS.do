@@ -149,7 +149,7 @@ preserve
 		graphregion(color(white) lcolor(white)) ///
 		ysize(6)
 
-	graph export "FigureA4_KLPS.eps", replace
+	graph export "results/figures/appendix/FigureA4_KLPS.eps", replace
 
 	graph set window fontface default
 	graph set eps fontface default
@@ -186,7 +186,7 @@ graph twoway ///
 		ytitle("Density") xtitle("Cognitive Ability, Normalized") ///
 		legend(label(1 "Born Rural") label(2 "Born Urban")) ///
 		xlabel(-4(2)4)
-graph export "FigureA7_KLPS.eps", replace
+graph export "results/figures/appendix/FigureA7_KLPS.eps", replace
 
 
 ********************************************************************************
@@ -320,7 +320,7 @@ xsize(5) ///
 ysize(6) ///
 imargin(0 0 0 0)
 
-graph export "FigureA8_KLPS_rural.eps" , replace
+graph export "results/figures/appendix/FigureA8_KLPS_rural.eps" , replace
 
 graph set window fontface default
 graph set eps fontface default
@@ -376,7 +376,7 @@ egen nonag_ever = max(nonag) , by(pupid)
 	//blank
 
   esttab educpri educsec educcol female ravens all1 all2 ///
-    using "TableA1_KLPS.tex", replace type fragment ///
+    using "reuslts/tables/appendix/TableA1_KLPS.tex", replace type fragment ///
 	  label ///
 		se(3) ///
 		nomtitles ///
@@ -397,7 +397,7 @@ egen nonag_ever = max(nonag) , by(pupid)
 	eststo all2: reg migrU_ever educpri educsec educcol female, robust
 
   esttab educpri educsec educcol female ravens all1 all2 ///
-    using "TableA2_KLPS.tex", fragment replace type ///
+    using "reuslts/tables/appendix/TableA2_KLPS.tex", fragment replace type ///
 		label ///
 		se(3) ///
 		nomtitles ///
@@ -444,7 +444,7 @@ bys town urban: gen temp = 1 if _n==1
 
 eststo kenya_urban_town: estpost tabstat mean_obs reported_town_pop if urban==1 & temp==1, by(group) nototal statistic(mean)
 esttab kenya_urban_town ///
-    using "TableA5_KLPS.tex", fragment replace type ///
+    using "reuslts/tables/appendix/TableA5_KLPS.tex", fragment replace type ///
 		cells("reported_town_pop(label(Population) fmt(%30.0fc)) mean_obs(fmt(1) label(\shortstack{Percentage of Urban\\Individual-Months}))") ///
 		noobs ///
 		nonumbers ///
@@ -507,7 +507,7 @@ estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
-esttab A C G H AA CC GG HH using "TableA6_KLPS.tex", replace f ///
+esttab A C G H AA CC GG HH using "reuslts/tables/appendix/TableA6_KLPS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -551,7 +551,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store H
 
-esttab A C G H using "TableA7_KLPS.tex", replace f ///
+esttab A C G H using "reuslts/tables/appendix/TableA7_KLPS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons *yrmth* voced voced_treat_info voced_treat_voucher lnhour lnhour_sq female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -596,7 +596,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
 
-esttab A C D E G using "TableA8_KLPS.tex", replace f ///
+esttab A C D E G using "reuslts/tables/appendix/TableA8_KLPS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons *yrmth* voced voced_treat_info voced_treat_voucher age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -638,7 +638,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
 
-esttab A C D E G using "TableA9_KLPS.tex", replace f ///
+esttab A C D E G using "reuslts/tables/appendix/TableA9_KLPS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons *yrmth* voced voced_treat_info voced_treat_voucher age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -731,7 +731,7 @@ ereturn clear
 ereturn post b vcv
 eststo temp
 
-esttab temp using "TableA10_KLPS.tex", replace f type ///
+esttab temp using "reuslts/tables/appendix/TableA10_KLPS.tex", replace f type ///
 	label booktabs b(3) p(3) eqlabels(none) collabels(none) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
 	///mlabels("\shortstack{Dependent variable:\\Log Wage}") ///mgroups("Dependent variable: Log Wage", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
@@ -830,7 +830,7 @@ estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
-esttab A C G H AA CC GG HH using "TableA12_KLPS.tex", replace f ///
+esttab A C G H AA CC GG HH using "reuslts/tables/appendix/TableA12_KLPS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons lnforhour lnforhour_sq female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -901,7 +901,7 @@ estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
-esttab A C G H AA CC GG HH using "TableA13_KLPS.tex", replace f type ///
+esttab A C G H AA CC GG HH using "reuslts/tables/appendix/TableA13_KLPS.tex", replace f type ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	keep(nonag urban) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -985,7 +985,7 @@ estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
-esttab A C F G AA CC FF GG using "TableA14_KLPS_PanelA.tex", replace f ///
+esttab A C F G AA CC FF GG using "reuslts/tables/appendix/TableA14_KLPS_PanelA.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons lnhour_allhours lnhour_allhours_sq female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1065,7 +1065,7 @@ estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
-esttab A C F G AA CC FF GG using "TableA14_KLPS_PanelB.tex", replace f ///
+esttab A C F G AA CC FF GG using "reuslts/tables/appendix/TableA14_KLPS_PanelB.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons lnforinforhour lnforinforhour_sq female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1132,7 +1132,7 @@ estadd local indFE "Y" , replace
 estadd local depmean `: di %05.3f `unempl_mean'', replace
 estadd local cluster `e(N_clust)', replace
 est store FF
-esttab A C F AA CC FF using "TableA15_unemp.tex", fragment replace type ///
+esttab A C F AA CC FF using "reuslts/tables/appendix/TableA15_unemp.tex", fragment replace type ///
   label booktabs b(3) p(3) eqlabels(none) collabels(none) ///
 	drop(_cons female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///
 	star(* 0.10 ** 0.05 *** 0.01) /// // mtitle(("test" "" "" "hello" "" "") pattern(1 0 0 1 0 0))  /// // "Movers" "Urban Movers"
@@ -1164,7 +1164,7 @@ estadd local indFE "Y" , replace
 estadd local depmean `: di %05.3f `searchtot_mean'', replace
 estadd local cluster `e(N_clust)', replace
 est store F
-esttab A C F using "TableA15_search.tex", replace f ///
+esttab A C F using "reuslts/tables/appendix/TableA15_search.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	// drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1598,7 +1598,7 @@ matrix stderr_young = vecdiag(temp)
 
 estadd matrix stderr_young: GG
 
-esttab AA CC FF GG A C F G using "TableA16_KLPS.tex", replace type f ///
+esttab AA CC FF GG A C F G using "reuslts/tables/appendix/TableA16_KLPS.tex", replace type f ///
   cells(b(fmt(3)star) stderr_default(par(( ))) stderr_cr2(par([ ])) stderr_cr3(par(`"\$\\llbracket\$"' `"\$\\rrbracket\$"')) stderr_bootstrap(par(\{ \})) stderr_young(par(`"\$\\langle"' `"\\rangle\$"'))) ///
 	keep(urban nonag) ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	// drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
@@ -1639,7 +1639,7 @@ foreach depvar in child_cogn_index {
 	estadd local square "Y"
 }
 
-esttab child_cogn_index_reg* using "TableA17_KLPS.tex", ///
+esttab child_cogn_index_reg* using "reuslts/tables/appendix/TableA17_KLPS.tex", ///
 	booktabs type replace fragment ///
   b(%5.3f) se(%5.3f) ///
   star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1673,7 +1673,7 @@ foreach var of varlist lncons_tot lninc lninc_h {
 }
 
 esttab lncons_tot lninc lninc_h ///
-	using "TableA18_KLPS.tex", f replace type ///
+	using "reuslts/tables/appendix/TableA18_KLPS.tex", f replace type ///
 	label ///
 	mtitle("Log Consumption" "Log Earnings" "Log Wage")  ///
 	drop(_cons) ///
@@ -1741,7 +1741,7 @@ esttab ///
 	mealsgap_urban_raw ///
   mealsgap_urban_ctrl ///
 	mealsgap_urban_fe ///
-  using "TableA19_KLPS.tex", replace f type ///
+  using "reuslts/tables/appendix/TableA19_KLPS.tex", replace f type ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	// indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///	// female age age_sq educyr educyr_sq ravens ravens_sq voced voced_treat_info voced_treat_voucher
 	star(* 0.10 ** 0.05 *** 0.01) /// //	collabels("\multicolumn{3}{c}{test}" "\multicolumn{3}{c}{test2}") ///
@@ -1782,7 +1782,7 @@ estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store F
-esttab A0 A C F using "TableA23_KLPS.tex", replace f ///
+esttab A0 A C F using "reuslts/tables/appendix/TableA23_KLPS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(c c) collabels(none) /// // alignment(S S)  // collabels("\multicolumn{1}{c}{$\beta$ / SE}" // drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.yrmth" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons female age age_sq educyr educyr_sq voced voced_treat_info voced_treat_voucher age_sq *yrmth*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///	//
