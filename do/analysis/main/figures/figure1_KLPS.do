@@ -1,7 +1,7 @@
 ********************************************************************************
 *** Figure 1: Productivity Gap in Total Earnings
 ********************************************************************************
-use "Main_Analysis_KLPS.dta", clear
+use "$da/Main_Analysis_KLPS.dta", clear
 
 reg lninc urban [aw=weight], cluster(pupid) robust
 estadd local timeFE "N" , replace
@@ -199,5 +199,5 @@ est store G
 	;
 	 #delimit cr
 
-	graph save "results/figures/Figure1_KLPS_agnonag.gph", replace
+	graph save "$dfig/Figure1_KLPS_agnonag.gph", replace
 	restore

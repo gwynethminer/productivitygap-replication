@@ -19,50 +19,50 @@ Please contact Marieke Kleemans at kleemans@illinois.edu for questions
 ********************************************************************************
 *** Figure 1: Productivity Gap in Total Earnings
 ********************************************************************************
-do "do/analysis/main/figures/figure1_IFLS.do"
+do "$do/analysis/main/figures/figure1_IFLS.do"
 
 ********************************************************************************
 *** Figure 3: Event Study of Urban Migration
 ********************************************************************************
-do "do/analysis/main/figures/figure3_IFLS.do"
+do "$do/analysis/main/figures/figure3_IFLS.do"
 
 ********************************************************************************
 *** Table 1: Non-Agriculture/Agriculture and Urban/Rural
 ********************************************************************************
-do "do/analysis/main/tables/table1_IFLS.do"
+do "$do/analysis/main/tables/table1_IFLS.do"
 
 ********************************************************************************
 *** Table 2_IFLS: Summary Statistics
 ********************************************************************************
-do "do/analysis/main/tables/table2_IFLS.do"
+do "$do/analysis/main/tables/table2_IFLS.do"
 
 ********************************************************************************
 *** Table 3: Correlates of Employment in Non-Agriculture and Urban Migration
 ********************************************************************************
 **creates data to be used later when running the KLPS analysis
 keep pidlink migrRU_ever nonag_ever educpri educsec educcol female ravens_norm always_rural
-save "Table3_IFLS.dta", replace
+save "$da/Table3_IFLS.dta", replace
 restore
 
 
 ********************************************************************************
 *** Table 4: Non-Agricultural/Agricultural Gap in Earnings
 ********************************************************************************
-do "do/analysis/main/tables/table4_IFLS.do"
+do "$do/analysis/main/tables/table4_IFLS.do"
 
 ********************************************************************************
 *** Table 5: Urban/Rural Gap in Earnings
 ********************************************************************************
-do "do/analysis/main/tables/table5_IFLS.do"
+do "$do/analysis/main/tables/table5_IFLS.do"
 
 ********************************************************************************
 *** Table 6: Gap in Earnings, Indonesia. For Individuals Born Rural and Urban
 ********************************************************************************
-do "do/analysis/main/tables/table6_IFLS.do"
+do "$do/analysis/main/tables/table6_IFLS.do"
 
 ********************************************************************************
 *** Appendix Figures and Tables
 ********************************************************************************
-do "do/analysis/appendix/appendix_tables_figures_IFLS.do"
+do "$do/analysis/appendix/appendix_tables_figures_IFLS.do"
 
 exit

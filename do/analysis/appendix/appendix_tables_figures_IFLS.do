@@ -65,7 +65,7 @@ preserve
 		graphregion(color(white) lcolor(white)) ///
 		ysize(6)
 
-	graph export "results/figures/appendix/FigureA4_IFLS.eps" , replace
+	graph export "$dfig/appendix/FigureA4_IFLS.eps" , replace
 
 	graph set window fontface default
 	graph set eps fontface default
@@ -312,7 +312,7 @@ preserve
 		graphregion(color(white) lcolor(white)) ///
 		ysize(6)
 
-	graph export "results/figures/appendix/FigureA5_IFLS.eps" , replace
+	graph export "$dfig/appendix/FigureA5_IFLS.eps" , replace
 
 	graph set window fontface default
 	graph set eps fontface default
@@ -388,7 +388,7 @@ preserve
 		graphregion(color(white) lcolor(white)) ///
 		ysize(6)
 
-	graph export "results/figures/appendix/FigureA6_IFLS.eps", replace
+	graph export "$dfig/appendix/FigureA6_IFLS.eps", replace
 
 	graph set window fontface default
 	graph set eps fontface default
@@ -399,7 +399,7 @@ restore
 ********************************************************************************
 *** Figure A7: Marginal Distributions of Cognitive Ability
 ********************************************************************************
-use "Intergen_Analysis_IFLS.dta", clear
+use "$da/Intergen_Analysis_IFLS.dta", clear
 xtset pidlink year
 tostring fath_pidlink moth_pidlink, replace
 
@@ -428,7 +428,7 @@ foreach var of varlist age1988-max_educ {
 tostring moth_pidlink , replace
 save `momfile', replace
 
-use "Intergen_Analysis_IFLS.dta", clear
+use "$da/Intergen_Analysis_IFLS.dta", clear
 keep pidlink year age female ravens_norm ravens_norm_sq educyr urban_birth moth_pidlink fath_pidlink
 
 egen max_educ = max(educyr), by(pidlink)
@@ -538,13 +538,13 @@ graph twoway ///
 	  graphregion(color(white)) ///
 		ytitle("Density") xtitle("Raven's Score, Normalized") ///
 		legend(label(1 "Born Rural") label(2 "Born Urban"))
-graph export "results/figures/appendix/FigureA7_IFLS.eps", replace
+graph export "$dfig/appendix/FigureA7_IFLS.eps", replace
 
 
 ********************************************************************************
 *** Figure A8: Joint Distribution of Rural and Urban Productivities
 ********************************************************************************
-use "Main_Analysis_IFLS.dta", clear
+use "$da/Main_Analysis_IFLS.dta", clear
 preserve
 
 capture program drop crc_boot
@@ -700,7 +700,7 @@ graphregion(color(white) lcolor(white)) ///
 ysize(7) ///
 imargin(0 0 0 0)
 
-graph export "results/figures/appendix/FigureA8_IFLS_rural.eps" , replace
+graph export "$dfig/appendix/FigureA8_IFLS_rural.eps" , replace
 
 graph set eps fontface default
 
@@ -801,7 +801,7 @@ graph set eps fontface default
 	ysize(5) ///
 	imargin(0 0 0 0)
 
-  graph export "results/figures/appendix/FigureA8_IFLS_urban.eps" , replace
+  graph export "$dfig/appendix/FigureA8_IFLS_urban.eps" , replace
 
 	graph set eps fontface default
 
@@ -866,7 +866,7 @@ preserve
   local num_always_urban = r(N)
 
   esttab all always_rural migrRU_ever always_urban migrUR_ever counts ///
-    using "results/tables/Table2_IFLS.tex", replace type fragment ///
+    using "$dtab/Table2_IFLS.tex", replace type fragment ///
 	cells(mean(pattern(1 1 1 1 1 0) fmt(%9.3f))& ///
           count(pattern(0 0 0 0 0 1) fmt(%9.0f)) ///
 	      sd(par([ ]) pattern(1 1 1 1 1 0) fmt(%9.3f))) ///
@@ -906,7 +906,7 @@ preserve
 	if (always_rural==1 | migrRU_ever==1), robust
 
   esttab educpri educsec educcol female ravens_norm all2 all1 ///
-    using "results/tables/appendix/TableA1_IFLS.tex", replace type fragment ///
+    using "$dtab/appendix/TableA1_IFLS.tex", replace type fragment ///
 	  label se(3) nomtitles ///
     title("Correlates of Employment in Non-agriculture (among those who start in rural)") ///
 	  nonotes ///
@@ -927,7 +927,7 @@ preserve
  	  if (always_rural==1 | migrRU_ever==1), robust
 
   esttab all2 ///
-    using "results/tables/appendix/TableA2_IFLS.tex", replace type fragment ///
+    using "$dtab/appendix/TableA2_IFLS.tex", replace type fragment ///
 	  label ///
 		se(3) ///
 		nomtitles ///
@@ -952,7 +952,7 @@ preserve
 	  if (always_rural==1 | migrRU_ever==1), robust
 
   esttab educpri educsec educcol female ravens_norm all2 all1 ///
-    using "results/tables/appendix/TableA2_IFLS.tex", replace type fragment ///
+    using "$dtab/appendix/TableA2_IFLS.tex", replace type fragment ///
 	  label ///
 		se(3) ///
 		nomtitles ///
@@ -981,7 +981,7 @@ preserve
 	if (always_urban==1 | migrUR_ever==1), robust
 
   esttab educpri educsec educcol female ravens_norm all2 all1 ///
-    using "results/tables/appendix/TableA3_IFLS.tex", replace type fragment ///
+    using "$dtab/appendix/TableA3_IFLS.tex", replace type fragment ///
 	  label se(3) nomtitles ///
     title("Correlates of Employment in Non-agriculture (among those who start in urban)") ///
 	  nonotes ///
@@ -1008,7 +1008,7 @@ preserve
 	  if (always_urban==1 | migrUR_ever==1), robust
 
   esttab educpri educsec educcol female ravens_norm all2 all1 ///
-    using "results/tables/appendix/TableA4_IFLS.tex", replace type fragment ///
+    using "$dtab/appendix/TableA4_IFLS.tex", replace type fragment ///
 	  label ///
 		se(3) ///
 		nomtitles ///
@@ -1078,7 +1078,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
 
-esttab A C G H AA CC GG HH using "results/tables/appendix/TableA6_IFLS.tex", replace f ///
+esttab A C G H AA CC GG HH using "$dtab/appendix/TableA6_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1121,7 +1121,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store H
 
-esttab A C G H using "results/tables/appendix/TableA7_IFLS.tex", replace f ///
+esttab A C G H using "$dtab/appendix/TableA7_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1164,7 +1164,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
 
-esttab A C D E G using "results/tables/appendix/TableA8_IFLS.tex", replace f ///
+esttab A C D E G using "$dtab/appendix/TableA8_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons *year* age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1205,7 +1205,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
 
-esttab A C D E G using "results/tables/appendix/TableA9_IFLS.tex", replace f ///
+esttab A C D E G using "$dtab/appendix/TableA9_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons *year* age age_sq) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1299,7 +1299,7 @@ ereturn clear
 ereturn post b vcv
 eststo temp
 
-esttab temp using "results/tables/appendix/TableA10_IFLS.tex", replace f type ///
+esttab temp using "$dtab/appendix/TableA10_IFLS.tex", replace f type ///
 	label booktabs b(3) p(3) eqlabels(none) collabels(none) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
 	///mlabels("\shortstack{Dependent variable:\\Log Wage (in KSh)}") ///mgroups("Dependent variable: Log Wage (in KSh)", pattern(1) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
@@ -1394,7 +1394,7 @@ estadd local contr "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
 
-esttab AA CC GG HH A C G H using "results/tables/appendix/TableA11_IFLS.tex", replace f ///
+esttab AA CC GG HH A C G H using "$dtab/appendix/TableA11_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///	// drop(yr1998mth1 yr1998mth2) ///	//	indicate("Time FE =i.year" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons lnhour lnhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///	// female age age_sq educyr educyr_sq ravens_norm ravens_norm_sq
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1466,7 +1466,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
 
-esttab A C G H AA CC GG HH using "results/tables/appendix/TableA12_IFLS.tex", replace f ///
+esttab A C G H AA CC GG HH using "$dtab/appendix/TableA12_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons lnforhour lnforhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1538,7 +1538,7 @@ estadd local contr "Y" , replace
 estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store HH
-esttab A C G H AA CC GG HH using "results/tables/appendix/TableA13_IFLS.tex", replace f ///
+esttab A C G H AA CC GG HH using "$dtab/appendix/TableA13_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons lninforhour lninforhour_sq female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -1948,7 +1948,7 @@ matrix stderr_young = vecdiag(temp)
 
 estadd matrix stderr_young: GG
 
-esttab AA CC FF GG A C F G using "results/tables/appendix/TableA16_IFLS.tex", replace type f ///
+esttab AA CC FF GG A C F G using "$dtab/appendix/TableA16_IFLS.tex", replace type f ///
   cells(b(fmt(3)star) stderr_default(par(( ))) stderr_cr2(par([ ])) stderr_cr3(par(`"\$\\llbracket\$"' `"\$\\rrbracket\$"')) stderr_bootstrap(par(\{ \})) stderr_young(par(`"\$\\langle\$"' `"\$\\rangle\$"'))) ///
 	keep(urban nonag) ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
@@ -1962,7 +1962,7 @@ esttab AA CC FF GG A C F G using "results/tables/appendix/TableA16_IFLS.tex", re
 ********************************************************************************
 *** Table A17: Integenerational Correlations of Cognitive Measures
 ********************************************************************************
-use "Intergen_Analysis_IFLS.dta", clear
+use "$da/Intergen_Analysis_IFLS.dta", clear
 xtset pidlink year
 tostring fath_pidlink moth_pidlink, replace
 
@@ -1991,7 +1991,7 @@ foreach var of varlist age1988-max_educ {
 tostring moth_pidlink , replace
 save `momfile', replace
 
-use "Intergen_Analysis_IFLS.dta", clear
+use "$da/Intergen_Analysis_IFLS.dta", clear
 keep pidlink year age female ravens_norm ravens_norm_sq educyr urban_birth moth_pidlink fath_pidlink
 
 egen max_educ = max(educyr), by(pidlink)
@@ -2095,7 +2095,7 @@ estadd local square "N"
 eststo raven_regb5: reg ravens_norm urban_birth `control5' if has_parent==1, robust
 estadd local square "Y"
 
-esttab raven_regb* using "results/tables/appendix/TableA17_IFLS.tex", ///
+esttab raven_regb* using "$dtab/appendix/TableA17_IFLS.tex", ///
 	booktabs type replace fragment ///
   b(%5.3f) se(%5.3f) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -2127,7 +2127,7 @@ esttab raven_regb* using "results/tables/appendix/TableA17_IFLS.tex", ///
 *** Table A19: Gaps in Consumption
 ********************************************************************************
 *** Regression total consumption - full sample
-use "Consumption_Analysis_IFLS.dta", clear
+use "$da/Consumption_Analysis_IFLS.dta", clear
 preserve
 xtset pidlink year
 
@@ -2175,7 +2175,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
 
-esttab A C G AA CC GG using "results/tables/appendix/TableA19_IFLS.tex", replace f ///
+esttab A C G AA CC GG using "$dtab/appendix/TableA19_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -2228,7 +2228,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
 
-esttab A C G AA CC GG using "results/tables/appendix/TableA20_IFLS_food.tex", replace f ///
+esttab A C G AA CC GG using "$dtab/appendix/TableA20_IFLS_food.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -2276,7 +2276,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
 
-esttab A C G AA CC GG using "results/tables/appendix/TableA20_IFLS_nfood.tex", replace f ///
+esttab A C G AA CC GG using "$dtab/appendix/TableA20_IFLS_nfood.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	// indicate("Time FE =i.year" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	// female age age_sq educyr educyr_sq ravens_norm ravens_norm_sq
 	star(* 0.10 ** 0.05 *** 0.01) /// //	collabels("\multicolumn{3}{c}{test}" "\multicolumn{3}{c}{test2}") ///
@@ -2294,7 +2294,7 @@ restore
 *** Table A21: Gap in Consumption (Main Analysis Sample), Indonesia
 ********************************************************************************
 *** Regression total consumption
-use "Main_Analysis_IFLS.dta", clear
+use "$da/Main_Analysis_IFLS.dta", clear
 
 keep if !missing(lncons_tot)
 keep if !missing(lncons_food)
@@ -2337,7 +2337,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
 
-esttab A C G AA CC GG using "results/tables/appendix/TableA21_IFLS_tot.tex", replace f ///
+esttab A C G AA CC GG using "$dtab/appendix/TableA21_IFLS_tot.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -2386,7 +2386,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
 
-esttab A C G AA CC GG using "results/tables/appendix/TableA21_IFLS_food.tex", replace f ///
+esttab A C G AA CC GG using "$dtab/appendix/TableA21_IFLS_food.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -2435,7 +2435,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store GG
 
-esttab A C G AA CC GG using "results/tables/appendix/TableA21_IFLS_nfood.tex", replace f ///
+esttab A C G AA CC GG using "$dtab/appendix/TableA21_IFLS_nfood.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	// female age age_sq educyr educyr_sq ravens_norm ravens_norm_sq
 	star(* 0.10 ** 0.05 *** 0.01) ///
@@ -2450,7 +2450,7 @@ esttab A C G AA CC GG using "results/tables/appendix/TableA21_IFLS_nfood.tex", r
 ********************************************************************************
 *** Table A22: Gap in Consumption for those Born in Rural and Urban Areas, Indonesia
 ********************************************************************************
-use "Main_Analysis_IFLS.dta", clear
+use "$da/Main_Analysis_IFLS.dta", clear
 
 *** Regression total consumption - Full sample but only those born in rural area
 preserve
@@ -2502,7 +2502,7 @@ est store GG_urban_IFLS
 
 restore
 ** Consumption
-use "Consumption_Analysis_IFLS.dta", clear
+use "$da/Consumption_Analysis_IFLS.dta", clear
 
 xtset pidlink year
 
@@ -2561,7 +2561,7 @@ est store GG_urban_IFLSall
 
 restore
 *
-esttab AA_rural_IFLSall CC_rural_IFLSall GG_rural_IFLSall AA_rural_IFLS CC_rural_IFLS GG_rural_IFLS using "results/tables/appendix/TableA22_IFLS_rural.tex", replace f ///
+esttab AA_rural_IFLSall CC_rural_IFLSall GG_rural_IFLSall AA_rural_IFLS CC_rural_IFLS GG_rural_IFLS using "$dtab/appendix/TableA22_IFLS_rural.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	// indicate("Time FE =i.year" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	// $controls_all
 	star(* 0.10 ** 0.05 *** 0.01) /// //	collabels("\multicolumn{3}{c}{test}" "\multicolumn{3}{c}{test2}") ///
@@ -2571,7 +2571,7 @@ esttab AA_rural_IFLSall CC_rural_IFLSall GG_rural_IFLSall AA_rural_IFLS CC_rural
 	stats(indFE contr N cluster, fmt(0) layout("\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}" "\multicolumn{1}{c}{@}") ///
 	labels(`"Individual fixed effects"' `"Control variables and time FE"' `"Number of observations"' `"Number of individuals"'))
 
-esttab AA_urban_IFLSall CC_urban_IFLSall GG_urban_IFLSall AA_urban_IFLS CC_urban_IFLS GG_urban_IFLS using "results/tables/appendix/TableA22_IFLS_urban.tex", replace f ///
+esttab AA_urban_IFLSall CC_urban_IFLSall GG_urban_IFLSall AA_urban_IFLS CC_urban_IFLS GG_urban_IFLS using "$dtab/appendix/TableA22_IFLS_urban.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none)	///	// indicate("Time FE =i.year" "Individual FE = $test", labels(Y N)) ///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///	// $controls_all
 	star(* 0.10 ** 0.05 *** 0.01) /// //	collabels("\multicolumn{3}{c}{test}" "\multicolumn{3}{c}{test2}") ///
@@ -2586,7 +2586,7 @@ esttab AA_urban_IFLSall CC_urban_IFLSall GG_urban_IFLSall AA_urban_IFLS CC_urban
 ********************************************************************************
 *** Table A23: Urban/Rural Gap in Wages for Top 5 Cities
 ********************************************************************************
-use "Main_Analysis_IFLS.dta", clear
+use "$da/Main_Analysis_IFLS.dta", clear
 *** Cities in top 5
 preserve
 keep if !missing(jakarta)
@@ -2620,7 +2620,7 @@ estadd local indFE "Y" , replace
 estadd local cluster `e(N_clust)', replace
 est store G
 
-esttab A0 A C G using "results/tables/appendix/TableA23_IFLS.tex", replace f ///
+esttab A0 A C G using "$dtab/appendix/TableA23_IFLS.tex", replace f ///
 	label booktabs b(3) p(3) eqlabels(none) alignment(S S) collabels(none) ///
 	drop(_cons female age age_sq educyr educyr_sq age_sq *year*) ///
 	star(* 0.10 ** 0.05 *** 0.01) ///

@@ -357,7 +357,7 @@ gen eventime = year - firstmoveR2U
 		graphregion(color(white) lcolor(white)) ///
 		ysize(6)
 
-	graph export "results/figures/Figure3_IFLS.eps", replace
+	graph export "$dfig/Figure3_IFLS.eps", replace
 
 	graph set window fontface default
 	graph set eps fontface default

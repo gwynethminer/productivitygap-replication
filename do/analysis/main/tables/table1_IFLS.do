@@ -33,7 +33,7 @@ matrix xtab[3,3] = r(N)
 
 
 esttab matrix(xtab, fmt("%7.4f %7.4f %10.0fc" "%7.4f %7.4f %10.0fc"  "%7.4f %7.4f %10.0fc" )) ///
-  using "results/tables/Table1_IFLS.tex", replace ///
+  using "$dtab/Table1_IFLS.tex", replace ///
   type booktabs ///
   collabels("Rural" "Urban" "Total") ///
 	varlabels(r1 "Agriculture" r2 "Non-Agriculture" r3 "Number of Observations") ///

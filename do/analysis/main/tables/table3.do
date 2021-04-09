@@ -4,7 +4,7 @@
 preserve
 
 *** IFLS analysis
-use "Table3_IFLS.dta", clear
+use "$da/Table3_IFLS.dta", clear
 rename ravens_norm ravens		// Only to fix labels
 reg nonag_ever educpri educsec educcol female ravens if always_rural==1 | migrRU_ever==1, robust
 est store A

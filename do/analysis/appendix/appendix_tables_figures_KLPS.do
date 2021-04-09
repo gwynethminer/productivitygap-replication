@@ -160,7 +160,7 @@ restore
 ********************************************************************************
 *** Figure A7: Marginal Distributions of Cognitive Ability
 ********************************************************************************
-use "Intergen_Analysis_KLPS.dta", clear
+use "$da/Intergen_Analysis_KLPS.dta", clear
 
 egen hasmiss = rowmiss(`control5')
 drop if hasmiss >0
@@ -192,7 +192,7 @@ graph export "results/figures/appendix/FigureA7_KLPS.eps", replace
 ********************************************************************************
 *** Figure A8: Joint Distribution of Rural and Urban Productivities
 ********************************************************************************
-use "Main_Analysis_KLPS.dta", clear
+use "$da/Main_Analysis_KLPS.dta", clear
 * Variable for first observation by pupid
 sort pupid yrmth
 by pupid: gen obsnum = _n
@@ -329,7 +329,7 @@ graph set eps fontface default
 ********************************************************************************
 *** Table A1: Correlates of Employment in Non-Agriculture
 ********************************************************************************
-use "Main_Analysis_KLPS.dta", clear
+use "$da/Main_Analysis_KLPS.dta", clear
 preserve
 egen nonag_ever = max(nonag) , by(pupid)
 
@@ -566,7 +566,7 @@ restore
 ********************************************************************************
 *** Table A8: Non-Agricultural/Agricultural Gap in Hours Worked
 ********************************************************************************
-use "Main_Analysis_KLPS.dta", clear
+use "$da/Main_Analysis_KLPS.dta", clear
 
 *** lnhour_nonag_KLPS
 reg lnhour nonag [aw=weight], cluster(pupid) robust
@@ -1081,7 +1081,7 @@ restore
 ********************************************************************************
 *** Table A15: Unemployment and Job Search Behavior, Kenya
 ********************************************************************************
-use "Consumption_Analysis_KLPS.dta", clear
+use "$da/Consumption_Analysis_KLPS.dta", clear
 
 keep if !missing(urban)
 keep if !missing(female)
@@ -1615,7 +1615,7 @@ drop res_lninc res_lninc_h res_`urban' res_nonag `residualized2'
 ********************************************************************************
 *** Table A17: Integenerational Correlations of Cognitive Measures
 ********************************************************************************
-use "Intergen_Analysis_KLPS.dta", clear
+use "$da/Intergen_Analysis_KLPS.dta", clear
 
 local control2 child_female
 local control3 child_female parent_female parent_age_atchildbirth
@@ -1666,7 +1666,7 @@ esttab child_cogn_index_reg* using "reuslts/tables/appendix/TableA17_KLPS.tex", 
 ********************************************************************************
 *** Table A18: Correlates of Meals Eaten—Kenya
 ********************************************************************************
-use "Consumption_Analysis_KLPS.dta", clear
+use "$da/Consumption_Analysis_KLPS.dta", clear
 
 foreach var of varlist lncons_tot lninc lninc_h {
   eststo `var': reg `var' logmeals , cluster(pupid)
@@ -1686,7 +1686,7 @@ esttab lncons_tot lninc lninc_h ///
 ********************************************************************************
 *** Table A19: Gaps in Consumption
 ********************************************************************************
-use "Meals_Analysis_KLPS.dta", clear
+use "$da/Meals_Analysis_KLPS.dta", clear
 xtset pupid yrmth
 
 * generate logs of meals
@@ -1756,7 +1756,7 @@ esttab ///
 ********************************************************************************
 *** Table A23: Urban/Rural Gap in inforinc_h for Top 5 Cities
 ********************************************************************************
-use "Main_Analysis_KLPS.dta", clear
+use "$da/Main_Analysis_KLPS.dta", clear
 
 reg lninc_h urban [aw=weight], cluster(pupid) robust
 estadd local timeFE "N" , replace
